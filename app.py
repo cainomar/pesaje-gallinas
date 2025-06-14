@@ -26,4 +26,28 @@ def calculate_stats(weights):
     avg = round(sum(weights) / total, 2) if total else 0
     std_dev = round(np.std(weights), 2)
     cv = round((std_dev / avg) * 100, 2) if avg else 0
-    uniformi
+    uniformity = round(
+        sum(1 for w in weights if abs(w - avg) <= 0.1 * avg) / total * 100, 2
+    ) if total else 0
+    return {
+        'total_aves': total,
+        'peso_promedio': avg,
+        'coef_variacion': cv,
+        'uniformidad': uniformity
+    }
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    results = None
+    if request.method == 'POST':
+        file = request.files['imagen']
+        if file:
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            weights = extract_weights_from_image(filepath)
+            results = calculate_stats(weights)
+    return render_template('index.html', resultados=results)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=10000)
