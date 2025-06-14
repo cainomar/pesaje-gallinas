@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Pesaje de Aves</title>
+</head>
+<body>
+  <h1>Subí tu planilla de pesaje</h1>
+  <form method="POST" enctype="multipart/form-data">
+    <input type="file" name="imagen" accept="image/*" required>
+    <button type="submit">Procesar</button>
+  </form>
+
+  {% if resultados %}
+    <h2>Resultados:</h2>
+    <ul>
+      <li>Total de aves: {{ resultados.total_aves }}</li>
+      <li>Peso promedio: {{ resultados.peso_promedio }} g</li>
+      <li>Coeficiente de variación: {{ resultados.coef_variacion }} %</li>
+      <li>Uniformidad: {{ resultados.uniformidad }} %</li>
+    </ul>
+  {% endif %}
+</body>
+</html>
